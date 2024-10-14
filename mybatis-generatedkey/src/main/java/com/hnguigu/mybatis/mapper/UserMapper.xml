@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.UserMapper">
+
+    <insert id="save">
+        INSERT INTO MYBATIS_USER (USER_ID, USER_NAME, USER_PASSWORD, USER_SALARY, USER_BIRTHDAY, DEPARTMENT_ID)
+        VALUES (NULL, #{name}, #{password}, #{salary}, #{birthday}, #{departmentId})
+    </insert>
+
+
+</mapper>

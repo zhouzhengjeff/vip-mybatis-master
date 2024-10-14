@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.RoleMapper">
+
+    <resultMap id="RoleBaseResultMap" type="Role">
+        <id property="id" column="role_id"/>
+        <result property="name" column="role_name"/>
+    </resultMap>
+
+
+</mapper>

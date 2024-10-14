@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.IdCardMapper">
+
+
+    <resultMap id="IdCardBaseResultMap" type="IdCard">
+        <id property="id" column="ID_CARD_ID"/>
+        <result property="number" column="ID_CARD_NUMBER"/>
+    </resultMap>
+
+    <resultMap id="IdCardResultMap" type="IdCard" extends="IdCardBaseResultMap">
+        <association property="person" column="id_card_id" javaType="Person"
+                     resultMap="com.hnguigu.mybatis.mapper.AnimalMapper.PersonBaseResultMap"/>
+    </resultMap>
+
+    <select id="findByNumber" resultMap="IdCardResultMap">
+        SELECT MIC.ID_CARD_ID,
+               MIC.ID_CARD_NUMBER,
+               MP.PERSON_ID,
+               MP.PERSON_NAME,
+               MP.ID_CARD_ID
+        FROM MYBATIS_ID_CARD MIC
+                 LEFT JOIN MYBATIS_ASSOCIATION.MYBATIS_PERSON MP ON MIC.ID_CARD_ID = MP.ID_CARD_ID
+        WHERE MIC.ID_CARD_NUMBER = #{number}
+    </select>
+
+</mapper>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.dao.UserMapper">
+
+    <!--
+        parameterType：参数类型 方法传递的参数类型  session.insert("com.hnguigu.mybatis.dao.UserMapper.save", user); 第二个参数是user,user对象的类型
+        必须写完整类名（全限定名）
+        但是此处可以使用别名，必须配置别名方可使用
+        <typeAliases>
+            <typeAlias type="com.hnguigu.mybatis.entity.Employee" alias="User"/>
+
+            推荐使用这种
+            <package name="com.hnguigu.mybatis.entity"/>
+        </typeAliases>
+
+        parameterType属性可以省略
+    -->
+    <insert id="save" parameterType="User">
+        INSERT INTO MYBATIS_USER(USER_NAME, USER_PASSWORD, USER_SALARY, USER_BIRTHDAY)
+        VALUES (#{name}, #{password}, #{salary}, #{birthday})
+    </insert>
+
+    <delete id="remove">
+        DELETE
+        FROM MYBATIS_USER
+        WHERE USER_ID = #{id}
+    </delete>
+
+    <!--
+        resultType属性不可以省略
+    -->
+    <select id="findById" resultType="User">
+        SELECT USER_ID ID, USER_NAME NAME, USER_PASSWORD PASSWORD, USER_SALARY SALARY, USER_BIRTHDAY BIRTHDAY
+        FROM MYBATIS_USER
+        WHERE USER_ID = #{id}
+    </select>
+
+    <update id="update">
+        UPDATE MYBATIS_USER
+        SET
+        user_name = #{name},
+        user_password = #{password},
+        user_salary = #{salary},
+        user_birthday = #{birthday}
+        WHERE
+        user_id = #{id}
+    </update>
+
+    <!--<select id="findAll" resultType="User">
+        SELECT USER_ID       ID,
+               USER_NAME     NAME,
+               USER_PASSWORD PASSWORD,
+               USER_SALARY   SALARY,
+               USER_BIRTHDAY BIRTHDAY
+        FROM MYBATIS_USER
+    </select>-->
+
+    <resultMap id="UserResultMap" type="User">
+        <id property="id" column="user_id"/>
+        <result property="name" column="user_name"/>
+        <result property="password" column="user_password"/>
+        <result property="salary" column="user_salary"/>
+        <result property="birthday" column="user_birthday"/>
+    </resultMap>
+
+    <!--
+        resultMap 结果集映射（Mapping 关系（table中的字段column）跟对象的属性（property）一一对应）
+    -->
+    <select id="findAll" resultMap="UserResultMap">
+        SELECT USER_ID,
+               USER_NAME,
+               USER_PASSWORD,
+               USER_SALARY,
+               USER_BIRTHDAY
+        FROM MYBATIS_USER
+    </select>
+
+</mapper>

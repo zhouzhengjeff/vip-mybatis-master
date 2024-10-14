@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.UserMapper">
+
+    <!--
+        在该namespace中开启了二级缓存
+    -->
+    <!--    <cache/>-->
+
+    <!--
+        type:使用哪种二级缓存产品。如果不配置则表示使用默认产品（org.apache.ibatis.cache.impl.PerpetualCache）
+    -->
+    <cache type="org.mybatis.caches.ehcache.EhcacheCache"
+           eviction="LRU"
+           size="1024"
+           readOnly="true"
+           flushInterval="60000"
+    />
+
+    <resultMap id="UserResultMap" type="User">
+        <id property="id" column="USER_ID"/>
+        <result property="name" column="user_name"/>
+        <result property="password" column="user_password"/>
+        <result property="salary" column="user_salary"/>
+        <result property="birthday" column="user_birthday"/>
+    </resultMap>
+
+    <update id="update">
+        UPDATE MYBATIS_USER
+        <set>
+            <if test="name != null and name != ''">
+                USER_NAME = #{name},
+            </if>
+
+            <if test="password != null and password != ''">
+                USER_PASSWORD = #{password},
+            </if>
+
+            <if test="salary != null">
+                USER_salary = #{salary},
+            </if>
+
+            <if test="birthday != null">
+                USER_birthday = #{birthday},
+            </if>
+        </set>
+        where USER_ID = #{id}
+    </update>
+
+    <select id="findById" resultMap="UserResultMap">
+        SELECT USER_ID,
+               USER_NAME,
+               USER_PASSWORD,
+               USER_SALARY,
+               USER_BIRTHDAY
+        FROM MYBATIS_USER
+        WHERE USER_ID = #{id}
+    </select>
+</mapper>

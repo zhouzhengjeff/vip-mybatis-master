@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.UserMapper">
+
+    <resultMap id="UserResultMap" type="User">
+        <id property="id" column="USER_ID"/>
+        <result property="name" column="user_name"/>
+        <result property="password" column="user_password"/>
+        <result property="salary" column="user_salary"/>
+        <result property="birthday" column="user_birthday"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="UserResultMap">
+        SELECT USER_ID,
+               USER_NAME,
+               USER_PASSWORD,
+               USER_SALARY,
+               USER_BIRTHDAY
+        FROM MYBATIS_USER
+    </select>
+
+    <select id="find" resultMap="UserResultMap">
+        SELECT
+            USER_ID,
+            USER_NAME,
+            USER_PASSWORD,
+            USER_SALARY,
+            USER_BIRTHDAY
+        FROM MYBATIS_USER
+        <where>
+            <if test="name != null and '' != name">
+                AND user_name like #{name}
+            </if>
+
+            <if test="minSalary != null and maxSalary == null">
+                AND user_salary >= #{minSalary}
+            </if>
+
+            <if test="maxSalary != null and minSalary == null">
+                AND user_salary &lt; #{maxSalary}
+            </if>
+
+            <if test="minSalary != null and maxSalary != null">
+                AND user_salary between #{minSalary} and #{maxSalary}
+            </if>
+        </where>
+    </select>
+
+</mapper>

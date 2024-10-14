@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+
+    <typeAliases>
+        <package name="com.hnguigu.mybatis.entity"/>
+    </typeAliases>
+
+
+    <!--数据源配置 参考文档-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis_annotation?useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+
+    <!--映射文件的路径配置-->
+    <mappers>
+        <!--
+            必须满足映射文件的命名是有规范：这个映射文件的名称必须与接口的名称相同
+        -->
+        <package name="com.hnguigu.mybatis.mapper"/>
+    </mappers>
+
+
+</configuration>

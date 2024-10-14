@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.AnimalMapper">
+
+    <!--<resultMap id="DepartmentResultMap" type="Department">
+        <id property="id" column="department_id"/>
+        <result property="name" column="department_name"/>
+        <result property="location" column="department_location"/>
+
+        <collection property="users" column="department_id" ofType="User">
+            <id property="id" column="USER_ID"/>
+            <result property="name" column="user_name"/>
+            <result property="password" column="user_password"/>
+            <result property="salary" column="user_salary"/>
+            <result property="birthday" column="user_birthday"/>
+        </collection>
+    </resultMap>-->
+
+    <resultMap id="DepartmentResultMap" type="Department">
+        <id property="id" column="department_id"/>
+        <result property="name" column="department_name"/>
+        <result property="location" column="department_location"/>
+
+        <collection property="users" column="department_id" ofType="User"
+                    resultMap="com.hnguigu.mybatis.mapper.IdCardMapper.UserBaseResultMap"/>
+    </resultMap>
+
+    <select id="findByName" resultMap="DepartmentResultMap">
+        SELECT MD.DEPARTMENT_ID,
+               MD.DEPARTMENT_NAME,
+               MD.DEPARTMENT_LOCATION,
+               MU.USER_ID,
+               MU.USER_NAME,
+               MU.USER_PASSWORD,
+               MU.USER_SALARY,
+               MU.USER_BIRTHDAY
+        FROM MYBATIS_DEPARTMENT MD
+                 LEFT JOIN MYBATIS_USER MU ON MD.DEPARTMENT_ID = MU.DEPARTMENT_ID
+        WHERE MD.DEPARTMENT_NAME = #{name}
+    </select>
+</mapper>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.hnguigu.mybatis.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.hnguigu.mybatis.entity.User">
+        <id column="USER_ID" property="userId" jdbcType="INTEGER"/>
+        <result column="USER_NAME" property="userName" jdbcType="VARCHAR"/>
+        <result column="USER_PASSWORD" property="userPassword" jdbcType="VARCHAR"/>
+        <result column="USER_SALARY" property="userSalary" jdbcType="REAL"/>
+        <result column="USER_BIRTHDAY" property="userBirthday" jdbcType="DATE"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        USER_ID, USER_NAME, USER_PASSWORD, USER_SALARY, USER_BIRTHDAY
+    </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.hnguigu.mybatis.entity.UserExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from mybatis_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from mybatis_user
+        where USER_ID = #{userId,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        DELETE
+        FROM MYBATIS_USER
+        WHERE USER_ID = #{userId,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.hnguigu.mybatis.entity.UserExample">
+        delete from mybatis_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.hnguigu.mybatis.entity.User">
+        INSERT INTO MYBATIS_USER (USER_ID, USER_NAME, USER_PASSWORD,
+                                  USER_SALARY, USER_BIRTHDAY)
+        VALUES (#{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, #{userPassword,jdbcType=VARCHAR},
+                #{userSalary,jdbcType=REAL}, #{userBirthday,jdbcType=DATE})
+    </insert>
+    <insert id="insertSelective" parameterType="com.hnguigu.mybatis.entity.User">
+        insert into mybatis_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                USER_ID,
+            </if>
+            <if test="userName != null">
+                USER_NAME,
+            </if>
+            <if test="userPassword != null">
+                USER_PASSWORD,
+            </if>
+            <if test="userSalary != null">
+                USER_SALARY,
+            </if>
+            <if test="userBirthday != null">
+                USER_BIRTHDAY,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null">
+                #{userPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="userSalary != null">
+                #{userSalary,jdbcType=REAL},
+            </if>
+            <if test="userBirthday != null">
+                #{userBirthday,jdbcType=DATE},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.hnguigu.mybatis.entity.UserExample" resultType="java.lang.Integer">
+        select count(*) from mybatis_user
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update mybatis_user
+        <set>
+            <if test="record.userId != null">
+                USER_ID = #{record.userId,jdbcType=INTEGER},
+            </if>
+            <if test="record.userName != null">
+                USER_NAME = #{record.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userPassword != null">
+                USER_PASSWORD = #{record.userPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userSalary != null">
+                USER_SALARY = #{record.userSalary,jdbcType=REAL},
+            </if>
+            <if test="record.userBirthday != null">
+                USER_BIRTHDAY = #{record.userBirthday,jdbcType=DATE},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update mybatis_user
+        set USER_ID = #{record.userId,jdbcType=INTEGER},
+        USER_NAME = #{record.userName,jdbcType=VARCHAR},
+        USER_PASSWORD = #{record.userPassword,jdbcType=VARCHAR},
+        USER_SALARY = #{record.userSalary,jdbcType=REAL},
+        USER_BIRTHDAY = #{record.userBirthday,jdbcType=DATE}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.hnguigu.mybatis.entity.User">
+        update mybatis_user
+        <set>
+            <if test="userName != null">
+                USER_NAME = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userPassword != null">
+                USER_PASSWORD = #{userPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="userSalary != null">
+                USER_SALARY = #{userSalary,jdbcType=REAL},
+            </if>
+            <if test="userBirthday != null">
+                USER_BIRTHDAY = #{userBirthday,jdbcType=DATE},
+            </if>
+        </set>
+        where USER_ID = #{userId,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.hnguigu.mybatis.entity.User">
+        UPDATE MYBATIS_USER
+        SET USER_NAME     = #{userName,jdbcType=VARCHAR},
+            USER_PASSWORD = #{userPassword,jdbcType=VARCHAR},
+            USER_SALARY   = #{userSalary,jdbcType=REAL},
+            USER_BIRTHDAY = #{userBirthday,jdbcType=DATE}
+        WHERE USER_ID = #{userId,jdbcType=INTEGER}
+    </update>
+
+    <select id="findByName" resultType="com.hnguigu.mybatis.entity.User">
+        SELECT USER_ID       AS userId,
+               USER_NAME     AS USERNAME,
+               USER_PASSWORD AS USERPASSWORD,
+               USER_SALARY   AS USERSALARY,
+               USER_BIRTHDAY AS USERBIRTHDAY
+        FROM MYBATIS_USER
+        WHERE USER_NAME LIKE #{userName}
+    </select>
+</mapper>

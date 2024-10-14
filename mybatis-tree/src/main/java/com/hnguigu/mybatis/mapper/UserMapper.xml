@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.UserMapper">
+
+    <insert id="save">
+        INSERT INTO MYBATIS_CATEGORY (CATEGORY_ID, CATEGORY_NAME, PARENT_ID)
+        VALUES (NULL, #{name}, #{parent.id})
+    </insert>
+
+    <select id="findById" resultMap="CategoryBaseResultMap">
+        SELECT CATEGORY_ID,
+               CATEGORY_NAME
+        FROM MYBATIS_CATEGORY
+        WHERE CATEGORY_ID = #{id}
+    </select>
+
+    <resultMap id="CategoryBaseResultMap" type="Category">
+        <id property="id" column="category_id"/>
+        <result property="name" column="category_name"/>
+    </resultMap>
+
+    <resultMap id="CategoryResultMap" type="Category" extends="CategoryBaseResultMap">
+        <association property="parent" column="parent_id" javaType="Category"
+                     select="com.hnguigu.mybatis.mapper.AnimalMapper.findById"/>
+    </resultMap>
+
+
+    <select id="findByName" resultMap="CategoryResultMap">
+        SELECT MC.CATEGORY_ID,
+               MC.CATEGORY_NAME,
+               MC.PARENT_ID,
+               PMC.CATEGORY_ID,
+               PMC.CATEGORY_NAME
+        FROM MYBATIS_CATEGORY MC
+                 LEFT JOIN MYBATIS_CATEGORY PMC ON MC.PARENT_ID = PMC.CATEGORY_ID
+        WHERE MC.CATEGORY_NAME = #{name}
+    </select>
+
+    <select id="getByName" resultType="Category1">
+        SELECT CATEGORY_ID   ID,
+               CATEGORY_NAME NAME,
+               PARENT_ID     PARENTID
+        FROM MYBATIS_CATEGORY
+        WHERE CATEGORY_NAME = #{name}
+    </select>
+
+    <select id="searchChildrenByName" resultType="Category1">
+        SELECT CATEGORY_ID   ID,
+               CATEGORY_NAME NAME,
+               PARENT_ID     PARENTID
+        FROM MYBATIS_CATEGORY
+        WHERE PARENT_ID = (SELECT CATEGORY_ID
+                           FROM MYBATIS_CATEGORY
+                           WHERE CATEGORY_NAME = #{name})
+    </select>
+
+
+</mapper>

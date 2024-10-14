@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.IdCardMapper">
+
+    <insert id="save" parameterType="User">
+        INSERT INTO MYBATIS_USER(USER_ID, USER_NAME, USER_PASSWORD, USER_SALARY, USER_BIRTHDAY, DEPARTMENT_ID)
+        VALUES (NULL, #{name}, #{password}, #{salary}, #{birthday}, #{department.id})
+    </insert>
+
+    <!--<resultMap id="UserResultMap" type="User">
+        <id property="id" column="USER_ID"/>
+        <result property="name" column="user_name"/>
+        <result property="password" column="user_password"/>
+        <result property="salary" column="user_salary"/>
+        <result property="birthday" column="user_birthday"/>
+
+        &lt;!&ndash;
+            association：关联
+                - property：属性名称
+                - column：外键的名称
+                - javaType：关联属性的Java类型
+        &ndash;&gt;
+        <association property="department" column="department_id" javaType="Department">
+            <id property="id" column="department_id"/>
+            <result property="name" column="department_name"/>
+            <result property="location" column="department_location"/>
+        </association>
+    </resultMap>-->
+
+
+    <resultMap id="UserBaseResultMap" type="User">
+        <id property="id" column="USER_ID"/>
+        <result property="name" column="user_name"/>
+        <result property="password" column="user_password"/>
+        <result property="salary" column="user_salary"/>
+        <result property="birthday" column="user_birthday"/>
+    </resultMap>
+
+
+    <resultMap id="UserResultMap" type="User" extends="UserBaseResultMap">
+
+
+        <!--
+            association：关联
+                - property：属性名称
+                - column：外键的名称
+                - javaType：关联属性的Java类型
+        -->
+        <association property="department" column="department_id" javaType="Department"
+                     resultMap="com.hnguigu.mybatis.mapper.AnimalMapper.DepartmentResultMap"/>
+    </resultMap>
+
+    <!--<resultMap id="UserResultMap" type="User">
+        <id property="id" column="USER_ID"/>
+        <result property="name" column="user_name"/>
+        <result property="password" column="user_password"/>
+        <result property="salary" column="user_salary"/>
+        <result property="birthday" column="user_birthday"/>
+
+        &lt;!&ndash;
+            association：关联
+                - property：属性名称
+                - column：外键的名称
+                - javaType：关联属性的Java类型
+        &ndash;&gt;
+        <association property="department" column="department_id" javaType="Department"
+                     select="com.hnguigu.mybatis.dao.DepartmentMapperper.findById"/>
+    </resultMap>-->
+
+
+    <select id="findByName" resultMap="UserResultMap">
+        SELECT MU.USER_ID,
+               MU.USER_NAME,
+               MU.USER_PASSWORD,
+               MU.USER_SALARY,
+               MU.USER_BIRTHDAY,
+               MD.DEPARTMENT_ID,
+               MD.DEPARTMENT_NAME,
+               MD.DEPARTMENT_LOCATION
+        FROM MYBATIS_USER MU
+                 LEFT JOIN MYBATIS_DEPARTMENT MD ON MU.DEPARTMENT_ID = MD.DEPARTMENT_ID
+        WHERE MU.USER_NAME = #{name}
+    </select>
+
+    <select id="getByName" resultType="User">
+        SELECT USER_ID       ID,
+               USER_NAME     NAME,
+               USER_PASSWORD PASSWORD,
+               USER_SALARY   SALARY,
+               USER_BIRTHDAY BIRTHDAY,
+               DEPARTMENT_ID DEPARTMENTID
+        FROM MYBATIS_USER
+        WHERE USER_NAME = #{name}
+    </select>
+
+
+</mapper>

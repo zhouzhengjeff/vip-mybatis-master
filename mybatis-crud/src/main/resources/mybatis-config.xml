@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+
+    <typeAliases>
+        <!--        <typeAlias type="com.hnguigu.mybatis.entity.Employee" alias="User"/>-->
+
+
+        <!--
+            默认规则：会使用该包下的所有的类的简单名作为别名
+        -->
+        <package name="com.hnguigu.mybatis.entity"/>
+    </typeAliases>
+
+
+    <!--数据源配置 参考文档-->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/mybatis_crud?useSSL=false"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+
+
+    <!--映射文件的路径配置-->
+    <mappers>
+        <mapper resource="com/hnguigu/mybatis/dao/impl/UserDao.xml"/>
+    </mappers>
+
+
+</configuration>

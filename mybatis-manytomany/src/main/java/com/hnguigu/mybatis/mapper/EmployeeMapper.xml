@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.EmployeeMapper">
+
+    <resultMap id="EmployeeBaseResultMap" type="Employee">
+        <id property="id" column="employee_id"/>
+        <result property="name" column="employee_name"/>
+    </resultMap>
+
+    <resultMap id="EmployeeResultMap" type="Employee" extends="EmployeeBaseResultMap">
+
+        <!--
+            一对多关系使用<collection>
+        -->
+        <collection property="employeeRoles" column="employee_id" ofType="EmployeeRole"
+                    resultMap="com.hnguigu.mybatis.mapper.EmployeeRoleMapper.EmployeeRoleResultMap"/>
+    </resultMap>
+
+    <select id="findByName" resultMap="EmployeeResultMap">
+        SELECT ME.EMPLOYEE_ID,
+               ME.EMPLOYEE_NAME,
+               MR.ROLE_ID,
+               MR.ROLE_NAME
+        FROM MYBATIS_EMPLOYEE ME
+                 LEFT JOIN MYBATIS_EMPLOYEE_ROLE MER ON ME.EMPLOYEE_ID = MER.EMPLOYEE_ID
+                 LEFT JOIN MYBATIS_ROLE MR ON MR.ROLE_ID = MER.ROLE_ID
+        WHERE ME.EMPLOYEE_NAME = #{name}
+    </select>
+
+    <select id="findDTOsByName" resultType="com.hnguigu.mybatis.dto.EmployeeDTO">
+        SELECT ME.EMPLOYEE_ID   ID,
+               ME.EMPLOYEE_NAME NAME,
+               MR.ROLE_ID       ROLEID,
+               MR.ROLE_NAME     ROLENAME
+        FROM MYBATIS_EMPLOYEE ME
+                 LEFT JOIN MYBATIS_EMPLOYEE_ROLE MER ON ME.EMPLOYEE_ID = MER.EMPLOYEE_ID
+                 LEFT JOIN MYBATIS_ROLE MR ON MR.ROLE_ID = MER.ROLE_ID
+        WHERE ME.EMPLOYEE_NAME = #{name}
+    </select>
+</mapper>

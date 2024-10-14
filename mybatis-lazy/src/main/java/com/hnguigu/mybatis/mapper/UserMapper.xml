@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.hnguigu.mybatis.mapper.UserMapper">
+
+    <resultMap id="UserBaseResultMap" type="User">
+        <id property="id" column="USER_ID"/>
+        <result property="name" column="user_name"/>
+        <result property="password" column="user_password"/>
+        <result property="salary" column="user_salary"/>
+        <result property="birthday" column="user_birthday"/>
+    </resultMap>
+
+    <resultMap id="UserResultMap" type="User" extends="UserBaseResultMap">
+        <association property="department" column="department_id" javaType="Department" fetchType="lazy"
+                     select="com.hnguigu.mybatis.mapper.DepartmentMapper.findById"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="UserResultMap">
+        SELECT USER_ID,
+               USER_NAME,
+               USER_PASSWORD,
+               USER_SALARY,
+               USER_BIRTHDAY,
+               DEPARTMENT_ID
+        FROM MYBATIS_USER
+    </select>
+
+    <select id="findByDepartmentId" resultMap="UserBaseResultMap">
+        SELECT USER_ID,
+               USER_NAME,
+               USER_PASSWORD,
+               USER_SALARY,
+               USER_BIRTHDAY
+        FROM MYBATIS_USER
+        WHERE DEPARTMENT_ID = #{id}
+    </select>
+
+
+</mapper>
